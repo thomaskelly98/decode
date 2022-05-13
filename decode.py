@@ -15,29 +15,39 @@ def copy_to_clipboard(output):
     process.communicate(output)
 
 
-def prettify_json_output(input):
+def decode_string(input):
+        if input == "q":
+            print("Exiting...")
+            exit()
+
+        return(decode(input))
+
+
+def decode_json(input):
+    if input == "q":
+        print("Exiting...")
+        exit()
+
+    input = decode(input)
+
     parsed = json.loads(input)
-    return json.dumps(parsed, indent=4, sort_keys=True)
+    return json.dumps(parsed, indent=4, sort_keys=True).encode()
 
 
 def main():
     while True:
         input_string = input("Paste base64 encoded string here and hit Enter:\n")
 
-        if input_string == "q":
-            print("Exiting...")
-            exit()
-
-        output_string = decode(input_string)
         try:
-            output_string = prettify_json_output(output_string)
+            output_string = decode_json(input_string)
         except:
-            pass
+            output_string = decode_string(input_string)
 
         print(f"{'-'*20}-----\nDecoded Data:\n")
         print(output_string.decode("utf-8"))
 
         copy_to_clipboard(output_string)
+
         print(f"\nDecoded Data copied to Clipboard\n{'-'*20}")
 
 
